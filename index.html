@@ -3,45 +3,88 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Product AR</title>
+  <title>Aniston Product AR</title>
   <style>
-    html,body{height:100%;margin:0;font-family:system-ui,Arial}
-    .wrap{display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:24px}
-    .hint{max-width:520px;color:#222}
-    .small{color:#666;font-size:14px;margin-top:12px}
-    a.button{display:inline-block;padding:12px 18px;border-radius:10px;background:#111;color:#fff;text-decoration:none;margin-top:16px}
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, Arial, sans-serif;
+      background: #fafafa;
+    }
+    .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 24px;
+    }
+    .hint {
+      max-width: 520px;
+      color: #222;
+    }
+    .small {
+      color: #666;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+    a.button {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      margin-top: 16px;
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="hint">
     <h1>Launching AR…</h1>
-    <p>If it doesn’t open automatically, tap the button below.</p>
+    <p>If it doesn’t open automatically, tap below:</p>
     <div id="fallback"></div>
-    <p class="small">Android opens Scene Viewer; iOS will work once we add product.usdz.</p>
+    <p class="small">Android uses Scene Viewer; iPhone uses Quick Look.</p>
   </div>
 </div>
 
 <script>
+  // Absolute URLs for hosted models
   const glbUrl  = 'https://aniston-3d-model-test.netlify.app/models/hitem3d.glb';
-  const usdzUrl = 'https://aniston-3d-model-test.netlify.app/product.usdz';
+  const usdzUrl = 'https://aniston-3d-model-test.netlify.app/models/hitem3d.usdz';
 
-  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Your Product')}`;
-  const quickLook   = usdzUrl;
+  // Scene Viewer (Android) parameters
+  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Aniston Product')}&resizable=true&disable_occlusion=true`;
 
+  // Quick Look (iOS)
+  const quickLook = `${usdzUrl}#allowsContentScaling=1`;
+
+  // Detect device type
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android');
   const isIOS = /iphone|ipad|ipod/.test(ua);
 
-  function openAR(){
-    if (isAndroid) location.href = sceneViewer;
-    else if (isIOS){ location.href = quickLook; setTimeout(()=>showButton(quickLook,'Open in AR (iOS)'),700); }
-    else showButton(sceneViewer,'Open in AR (Android)');
+  function openAR() {
+    if (isAndroid) {
+      window.location.href = sceneViewer;
+    } else if (isIOS) {
+      // Quick Look requires direct file or tap fallback
+      window.location.href = quickLook;
+      setTimeout(() => showButton(quickLook, 'Open in AR (iPhone/iPad)'), 800);
+    } else {
+      showButton(sceneViewer, 'Open in AR (Android)');
+    }
   }
-  function showButton(href,label){
-    const a=document.createElement('a'); a.className='button'; a.href=href; a.textContent=label;
-    document.getElementById('fallback').appendChild(a);
+
+  function showButton(href, label) {
+    const btn = document.createElement('a');
+    btn.className = 'button';
+    btn.href = href;
+    btn.textContent = label;
+    document.getElementById('fallback').appendChild(btn);
   }
+
   window.addEventListener('load', openAR);
 </script>
 </body>
