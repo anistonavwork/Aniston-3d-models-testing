@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Product AR</title>
-  <meta name="format-detection" content="telephone=no" />
   <style>
     html,body{height:100%;margin:0;font-family:system-ui,Arial}
     .wrap{display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:24px}
@@ -19,41 +18,32 @@
     <h1>Launching AR…</h1>
     <p>If it doesn’t open automatically, tap the button below.</p>
     <div id="fallback"></div>
-    <p class="small">Tip: open on an Android phone (Chrome). iPhone will work after we add product.usdz.</p>
+    <p class="small">Android opens Scene Viewer; iOS opens Quick Look.</p>
   </div>
 </div>
 
 <script>
-  // TEST with Google's sample tiger model
-  const glbUrl  = 'https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb';
-  const usdzUrl = 'https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.usdz';
+  // Known-good public models
+  const glbUrl  = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+  const usdzUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz';
 
-  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Your Product')}`;
-  const quickLook  = usdzUrl;
+  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=Astronaut`;
+  const quickLook   = usdzUrl;
 
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android');
   const isIOS = /iphone|ipad|ipod/.test(ua);
 
   function openAR() {
-    if (isAndroid) {
-      location.href = sceneViewer;
-    } else if (isIOS) {
-      location.href = quickLook;
-      setTimeout(() => showButton(quickLook, 'Open in AR (iOS)'), 700);
-    } else {
-      showButton(sceneViewer, 'Open in AR (Android)');
-    }
+    if (isAndroid) location.href = sceneViewer;
+    else if (isIOS) { location.href = quickLook; setTimeout(()=>showButton(quickLook,'Open in AR (iOS)'),700); }
+    else showButton(sceneViewer,'Open in AR (Android)');
   }
-  function showButton(href, label) {
-    const a = document.createElement('a');
-    a.className = 'button';
-    a.href = href;
-    a.textContent = label;
+  function showButton(href,label){
+    const a=document.createElement('a'); a.className='button'; a.href=href; a.textContent=label;
     document.getElementById('fallback').appendChild(a);
   }
   window.addEventListener('load', openAR);
 </script>
-
 </body>
 </html>
