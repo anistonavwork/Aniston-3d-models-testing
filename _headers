@@ -1,8 +1,11 @@
-/*.glb
+/hitem3d.glb
   Access-Control-Allow-Origin: *
   Content-Type: model/gltf-binary
+  Content-Disposition: inline
+  X-Content-Type-Options: nosniff
 
-/*.usdz
+/product.usdz
   Access-Control-Allow-Origin: *
   Content-Type: model/vnd.usdz+zip
+  Content-Disposition: inline
   X-Content-Type-Options: nosniff

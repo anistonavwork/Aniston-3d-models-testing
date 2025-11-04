@@ -4,15 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Product AR</title>
+  <meta name="format-detection" content="telephone=no" />
   <style>
-    html,body { height:100%; margin:0; font-family:system-ui, Arial; }
-    .wrap { display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:24px; }
-    .hint { max-width:520px; color:#222 }
-    .small { color:#666; font-size:14px; margin-top:12px }
-    a.button {
-      display:inline-block; padding:12px 18px; border-radius:10px;
-      background:#111; color:#fff; text-decoration:none; margin-top:16px
-    }
+    html,body{height:100%;margin:0;font-family:system-ui,Arial}
+    .wrap{display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:24px}
+    .hint{max-width:520px;color:#222}
+    .small{color:#666;font-size:14px;margin-top:12px}
+    a.button{display:inline-block;padding:12px 18px;border-radius:10px;background:#111;color:#fff;text-decoration:none;margin-top:16px}
   </style>
 </head>
 <body>
@@ -21,24 +19,22 @@
     <h1>Launching AR…</h1>
     <p>If it doesn’t open automatically, tap the button below.</p>
     <div id="fallback"></div>
-    <p class="small">Tip: This needs a modern mobile browser. On desktop you’ll just see this page.</p>
+    <p class="small">Tip: open on an Android phone (Chrome). iPhone will work after we add product.usdz.</p>
   </div>
 </div>
 
 <script>
-  // 1) Set your hosted file URLs
-  const glbUrl  = new URL('hitem3d.glb', window.location.href).toString(); // same-folder GLB
+  // ABSOLUTE URLs to avoid any path ambiguity
+  const glbUrl  = 'https://aniston-3d-model-test.netlify.app/hitem3d.glb';
+  const usdzUrl = 'https://aniston-3d-model-test.netlify.app/product.usdz'; // (we'll add this file later)
 
-  const usdzUrl = new URL('product.usdz', window.location.href).toString(); // will add later
-
-  // 2) Build platform-specific AR links
-  // Android Scene Viewer (GLB)
+  // Scene Viewer (Android) — opens camera with your GLB
   const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Your Product')}`;
 
-  // iOS Quick Look (USDZ) — will work once we add product.usdz
-  const quickLook = usdzUrl; // iOS just needs a direct .usdz link, can add #allowsContentScaling=1 if needed
+  // Quick Look (iOS) — direct USDZ link (works once product.usdz exists)
+  const quickLook = usdzUrl;
 
-  // 3) Simple UA detect
+  // UA detect
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android');
   const isIOS = /iphone|ipad|ipod/.test(ua);
@@ -47,11 +43,11 @@
     if (isAndroid) {
       window.location.href = sceneViewer;
     } else if (isIOS) {
-      // Quick Look requires a user gesture in some cases; try auto then show a tap button
+      // Quick Look may require user gesture; try auto then show button
       window.location.href = quickLook;
-      setTimeout(() => showButton(quickLook, 'Open in AR (iOS)'), 800);
+      setTimeout(() => showButton(quickLook, 'Open in AR (iOS)'), 700);
     } else {
-      showButton(sceneViewer, 'Open in AR (Android)'); // desktop fallback
+      showButton(sceneViewer, 'Open in AR (Android)');
     }
   }
 
@@ -63,7 +59,6 @@
     document.getElementById('fallback').appendChild(btn);
   }
 
-  // Try to auto-launch on load
   window.addEventListener('load', openAR);
 </script>
 </body>
