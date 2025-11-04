@@ -24,42 +24,36 @@
 </div>
 
 <script>
-  // ABSOLUTE URLs to avoid any path ambiguity
-  const glbUrl  = 'https://aniston-3d-model-test.netlify.app/hitem3d.glb';
-  const usdzUrl = 'https://aniston-3d-model-test.netlify.app/product.usdz'; // (we'll add this file later)
+  // TEST with Google's sample tiger model
+  const glbUrl  = 'https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb';
+  const usdzUrl = 'https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.usdz';
 
-  // Scene Viewer (Android) — opens camera with your GLB
   const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Your Product')}`;
+  const quickLook  = usdzUrl;
 
-  // Quick Look (iOS) — direct USDZ link (works once product.usdz exists)
-  const quickLook = usdzUrl;
-
-  // UA detect
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android');
   const isIOS = /iphone|ipad|ipod/.test(ua);
 
   function openAR() {
     if (isAndroid) {
-      window.location.href = sceneViewer;
+      location.href = sceneViewer;
     } else if (isIOS) {
-      // Quick Look may require user gesture; try auto then show button
-      window.location.href = quickLook;
+      location.href = quickLook;
       setTimeout(() => showButton(quickLook, 'Open in AR (iOS)'), 700);
     } else {
       showButton(sceneViewer, 'Open in AR (Android)');
     }
   }
-
   function showButton(href, label) {
-    const btn = document.createElement('a');
-    btn.className = 'button';
-    btn.href = href;
-    btn.textContent = label;
-    document.getElementById('fallback').appendChild(btn);
+    const a = document.createElement('a');
+    a.className = 'button';
+    a.href = href;
+    a.textContent = label;
+    document.getElementById('fallback').appendChild(a);
   }
-
   window.addEventListener('load', openAR);
 </script>
+
 </body>
 </html>
