@@ -18,25 +18,24 @@
     <h1>Launching AR…</h1>
     <p>If it doesn’t open automatically, tap the button below.</p>
     <div id="fallback"></div>
-    <p class="small">Android opens Scene Viewer; iOS opens Quick Look.</p>
+    <p class="small">Android opens Scene Viewer; iOS will work once we add product.usdz.</p>
   </div>
 </div>
 
 <script>
-  // Known-good public models
-  const glbUrl  = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
-  const usdzUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz';
+  const glbUrl  = 'https://aniston-3d-model-test.netlify.app/models/hitem3d.glb';
+  const usdzUrl = 'https://aniston-3d-model-test.netlify.app/product.usdz';
 
-  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=Astronaut`;
+  const sceneViewer = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${encodeURIComponent('Your Product')}`;
   const quickLook   = usdzUrl;
 
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android');
   const isIOS = /iphone|ipad|ipod/.test(ua);
 
-  function openAR() {
+  function openAR(){
     if (isAndroid) location.href = sceneViewer;
-    else if (isIOS) { location.href = quickLook; setTimeout(()=>showButton(quickLook,'Open in AR (iOS)'),700); }
+    else if (isIOS){ location.href = quickLook; setTimeout(()=>showButton(quickLook,'Open in AR (iOS)'),700); }
     else showButton(sceneViewer,'Open in AR (Android)');
   }
   function showButton(href,label){
